@@ -37,11 +37,13 @@ public class Server {
 
     private ServerSocket serverSocket;
     private Map<String, ClientHandler> handlers = new HashMap<>();
+    boolean running;
 
     public void start(int port) throws IOException {
         System.out.println("Server started");
+        running=true;
         serverSocket=new ServerSocket(port);
-        while(true)
+        while(running)
         {
             Socket socket = serverSocket.accept();
             ClientHandler handler= new ClientHandler(socket, this);
@@ -52,11 +54,7 @@ public class Server {
 
     public void stop()
     {
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        running=false;
     }
 
     public void addClient(String login, ClientHandler handler)
